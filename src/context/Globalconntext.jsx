@@ -1,5 +1,4 @@
 import React, { useState, useMemo, useEffect } from 'react'
-
 import { globalContext } from './globalContext'
 
 const Globalconntext = ({ children }) => {
@@ -7,6 +6,26 @@ const Globalconntext = ({ children }) => {
     const [favorites, setFavorites] = useState([])
     const [locations, setLocations] = useState([])
     const [characters, setCharacters] = useState([])
+    const [session, setSession] = useState(false)
+
+    const handleLogin = (username, password) => {
+        localStorage.setItem('user', username);
+        localStorage.setItem('password', password);
+    };
+
+    const handleLogout = () => {
+        localStorage.removeItem('user');
+        localStorage.removeItem('password');
+        setSession(false)
+        window.location.reload()
+    };
+
+    const handleSession = () => {
+        const user = localStorage.getItem('user');
+        if (user) {
+            setSession(user)
+        }
+    };
 
     const handleWindow = () => setWindowWidth(window.innerWidth)
 
@@ -70,10 +89,10 @@ const Globalconntext = ({ children }) => {
         }
     }
 
-
     useEffect(() => {
         handleGetCharacter()
         handleGetLocations()
+        handleSession()
     }, [])
 
     useEffect(() => {
@@ -82,6 +101,21 @@ const Globalconntext = ({ children }) => {
         return () => window.removeEventListener("resize", handleWindow)
     }, [])
 
+    // Guardar favoritos en localStorage cada vez que favorites cambie
+    useEffect(() => {
+        localStorage.setItem('favorites', favorites);
+    }, [favorites]);
+
+
+    // Cargar favoritos desde localStorage cuando la aplicación se monta
+    useEffect(() => {
+        const savedFavorites = localStorage.getItem('favorites');
+        if (savedFavorites) {
+            setFavorites(JSON.parse(savedFavorites));
+        }
+    }, []);
+    
+
     // Memoriza los valores 
     const valueProvider = useMemo(() => (
         {
@@ -89,6 +123,9 @@ const Globalconntext = ({ children }) => {
             favorites,
             characters,
             locations,
+            session,
+            handleLogin,
+            handleLogout,
             setFavorites,
             setCharacters,
             setLocations,

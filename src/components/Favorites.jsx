@@ -1,18 +1,25 @@
 import React, { useContext, useEffect } from 'react'
 import { globalContext } from '../context/globalContext'
-import Card from './Card'
+import CardLocation from './CardLocation'
+import CardCharacter from './CardCharacter'
 const Favorites = () => {
-  const { characters, favorites, setFavorites } = useContext(globalContext)
+  const { characters, locations, favorites, setFavorites } = useContext(globalContext)
+
   useEffect(() => {
-    const filterfavorites = characters.filter(item => item.favorite == true)
-    setFavorites(filterfavorites)
-  }, [characters])
+    const combinedFavorites = [
+      ...characters.filter(item => item.favorite),
+      ...locations.filter(item => item.favorite)
+    ]
+
+    setFavorites(combinedFavorites)
+
+  }, [characters, locations])
 
   return (
-    <div className='w-full grid grid-cols-4 gap-10 p-20 bg-slate-200'>
+    <div className='w-full grid grid-cols-4 gap-10 p-20'>
       {
-        favorites.map((item,index) => (
-          <Card key={index} item={item} location={true} character={true}/>
+        favorites.map((item, index) => (
+         item.option == "characters" ? <CardCharacter item={item}/> : item.option == "locations" ? <CardLocation item={item}/> : null
         ))
       }
     </div>

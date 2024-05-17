@@ -1,6 +1,6 @@
 import React, { useContext, useEffect } from 'react'
 import { globalContext } from '../context/globalContext'
-import Card from './Card'
+import CardLocation from './CardLocation'
 const Locations = () => {
   const { locations } = useContext(globalContext)
 
@@ -12,7 +12,7 @@ const Locations = () => {
     <div className='w-full grid grid-cols-4 gap-10 p-20 bg-slate-200'>
       {
         locations.map((item,index)=>(
-           <Card key={index} item={item} location={true} character={false}/>
+           <CardLocation key={index} item={item}/>
         ))
       }
      

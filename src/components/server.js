@@ -17,9 +17,8 @@ export const navbarServer = [
 
   {
     id: 4,
-    title: "Iniciar Sesión",
-    title2: "Cerrar Sesión",
+    title: "Login",
+    title2: "Logout",
     url: "/login",
-    url: "logout",
   },
 ];
